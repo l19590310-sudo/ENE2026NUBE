@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %} Agregar Producto {% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-6">
+                
+                <div class="box">
+                    <h3 class="title is-4 has-text-centered">
+                        Agregar Producto Skincare
+                    </h3>
+
+                    <form action="{{ url_for('create_producto') }}" method="POST">
+
+                        <!-- Nombre -->
+                        <div class="field">
+                            <label class="label">Nombre del Producto</label>
+                            <div class="control">
+                                <input class="input" type="text" 
+                                       name="nombre" 
+                                       placeholder="Ej. Hydrating Cleanser"
+                                       required>
+                            </div>
+                        </div>
+
+                        <!-- Marca -->
+                        <div class="field">
+                            <label class="label">Marca</label>
+                            <div class="control">
+                                <input class="input" type="text" 
+                                       name="marca" 
+                                       placeholder="Ej. CeraVe"
+                                       required>
+                            </div>
+                        </div>
+
+                        <!-- Tipo de Producto -->
+                        <div class="field">
+                            <label class="label">Tipo de Producto</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select name="tipo_producto" required>
+                                        <option value="">Seleccione una opción</option>
+                                        <option>Limpiador</option>
+                                        <option>Sérum</option>
+                                        <option>Crema Hidratante</option>
+                                        <option>Tónico</option>
+                                        <option>Protector Solar</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tipo de Piel -->
+                        <div class="field">
+                            <label class="label">Tipo de Piel</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select name="tipo_piel" required>
+                                        <option value="">Seleccione una opción</option>
+                                        <option>Grasa</option>
+                                        <option>Seca</option>
+                                        <option>Mixta</option>
+                                        <option>Normal</option>
+                                        <option>Sensible</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Precio -->
+                        <div class="field">
+                            <label class="label">Precio</label>
+                            <div class="control">
+                                <input class="input" type="number" 
+                                       name="precio" 
+                                       step="0.01"
+                                       min="0"
+                                       placeholder="Ej. 250.00"
+                                       required>
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="field is-grouped is-grouped-centered mt-5">
+                            <div class="control">
+                                <button type="submit" class="button is-skincare">
+                                    Guardar Producto
+                                </button>
+                            </div>
+                            <div class="control">
+                                <a href="{{ url_for('index') }}" class="button is-light">
+                                    Cancelar
+                                </a>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

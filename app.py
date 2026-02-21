@@ -1,7 +1,6 @@
 import os
 from flask import Flask, request, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-import os
 from dotenv import load_dotenv
 
 # Cargar variables de entorno
@@ -18,23 +17,24 @@ database_url = os.getenv('DATABASE_URL')
 if database_url:
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///estudiantes.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///skincare.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
 # ==========================
-# Modelo
+# Modelo Skincare
 # ==========================
-class Estudiante(db.Model):
-    __tablename__ = 'estudiantes'
+class Producto(db.Model):
+    __tablename__ = 'productos_skincare'
 
-    no_control = db.Column(db.String(20), primary_key=True)
+    id_producto = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(100), nullable=False)
-    ap_paterno = db.Column(db.String(100), nullable=False)
-    ap_materno = db.Column(db.String(100), nullable=False)
-    semestre = db.Column(db.Integer, nullable=False)
+    marca = db.Column(db.String(100), nullable=False)
+    tipo_producto = db.Column(db.String(50), nullable=False)
+    tipo_piel = db.Column(db.String(50), nullable=False)
+    precio = db.Column(db.Float, nullable=False)
 
 # Crear tablas automáticamente
 with app.app_context():
@@ -45,54 +45,55 @@ with app.app_context():
 # ==========================
 
 @app.route('/')
-@app.route('/estudiantes')
+@app.route('/productos')
 def index():
-    estudiantes = Estudiante.query.all()
-    return render_template('index.html', estudiantes=estudiantes)
+    productos = Producto.query.all()
+    return render_template('index.html', productos=productos)
 
-@app.route('/estudiantes/new', methods=['GET', 'POST'])
-def create_estudiante():
+@app.route('/productos/new', methods=['GET', 'POST'])
+def create_producto():
     if request.method == 'POST':
-        nuevo = Estudiante(
-            no_control=request.form['no_control'],
+        nuevo = Producto(
             nombre=request.form['nombre'],
-            ap_paterno=request.form['ap_paterno'],
-            ap_materno=request.form['ap_materno'],
-            semestre=int(request.form['semestre'])
+            marca=request.form['marca'],
+            tipo_producto=request.form['tipo_producto'],
+            tipo_piel=request.form['tipo_piel'],
+            precio=float(request.form['precio'])
         )
 
         db.session.add(nuevo)
         db.session.commit()
 
-        flash('Estudiante agregado correctamente', 'success')
+        flash('Producto agregado correctamente', 'success')
         return redirect(url_for('index'))
 
-    return render_template('create_estudiante.html')
+    return render_template('create_producto.html')
 
-@app.route('/estudiantes/update/<string:no_control>', methods=['GET', 'POST'])
-def update_estudiante(no_control):
-    estudiante = Estudiante.query.get_or_404(no_control)
+@app.route('/productos/update/<int:id_producto>', methods=['GET', 'POST'])
+def update_producto(id_producto):
+    producto = Producto.query.get_or_404(id_producto)
 
     if request.method == 'POST':
-        estudiante.nombre = request.form['nombre']
-        estudiante.ap_paterno = request.form['ap_paterno']
-        estudiante.ap_materno = request.form['ap_materno']
-        estudiante.semestre = int(request.form['semestre'])
+        producto.nombre = request.form['nombre']
+        producto.marca = request.form['marca']
+        producto.tipo_producto = request.form['tipo_producto']
+        producto.tipo_piel = request.form['tipo_piel']
+        producto.precio = float(request.form['precio'])
 
         db.session.commit()
-        flash('Estudiante actualizado correctamente', 'info')
+        flash('Producto actualizado correctamente', 'info')
         return redirect(url_for('index'))
 
-    return render_template('update_estudiante.html', estudiante=estudiante)
+    return render_template('update_producto.html', producto=producto)
 
-@app.route('/estudiantes/delete/<string:no_control>')
-def delete_estudiante(no_control):
-    estudiante = Estudiante.query.get_or_404(no_control)
+@app.route('/productos/delete/<int:id_producto>')
+def delete_producto(id_producto):
+    producto = Producto.query.get_or_404(id_producto)
 
-    db.session.delete(estudiante)
+    db.session.delete(producto)
     db.session.commit()
 
-    flash('Estudiante eliminado correctamente', 'danger')
+    flash('Producto eliminado correctamente', 'danger')
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

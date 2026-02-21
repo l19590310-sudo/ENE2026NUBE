@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Lista de Estudiantes{% endblock %}
+{% block title %}Lista de Productos{% endblock %}
 
 {% block content %}
 <section class="section">
@@ -8,12 +8,12 @@
         <!-- Encabezado -->
         <div class="level mb-5">
             <div class="level-left">
-                <h2 class="title is-4"> Lista de Estudiantes</h2>
+                <h2 class="title is-4"> Lista de Productos Skincare</h2>
             </div>
             <div class="level-right">
-                <a href="{{ url_for('create_estudiante') }}" 
-                   class="button is-success is-rounded">
-                    + Agregar Estudiante
+                <a href="{{ url_for('create_producto') }}" 
+                   class="button is-skincare is-rounded">
+                    + Agregar Producto
                 </a>
             </div>
         </div>
@@ -24,34 +24,44 @@
                 <table class="table is-fullwidth is-hoverable">
                     <thead>
                         <tr>
-                            <th>No. Control</th>
+                            <th>ID</th>
                             <th>Nombre</th>
-                            <th>Apellido Paterno</th>
-                            <th>Apellido Materno</th>
-                            <th>Semestre</th>
+                            <th>Marca</th>
+                            <th>Tipo</th>
+                            <th>Tipo de Piel</th>
+                            <th>Precio</th>
                             <th class="has-text-centered">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for estudiante in estudiantes %}
+                        {% for producto in productos %}
                         <tr>
-                            <td><strong>{{ estudiante.no_control }}</strong></td>
-                            <td>{{ estudiante.nombre }}</td>
-                            <td>{{ estudiante.ap_paterno }}</td>
-                            <td>{{ estudiante.ap_materno }}</td>
+                            <td><strong>{{ producto.id_producto }}</strong></td>
+                            <td>{{ producto.nombre }}</td>
+                            <td>{{ producto.marca }}</td>
+                            <td>
+                                <span class="tag is-primary is-light">
+                                    {{ producto.tipo_producto }}
+                                </span>
+                            </td>
                             <td>
                                 <span class="tag is-info is-light">
-                                    {{ estudiante.semestre }}
+                                    {{ producto.tipo_piel }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="tag is-success is-light">
+                                    ${{ "%.2f"|format(producto.precio) }}
                                 </span>
                             </td>
                             <td class="has-text-centered">
                                 <div class="buttons is-centered">
-                                    <a href="{{ url_for('update_estudiante', no_control=estudiante.no_control) }}" 
-                                       class="button is-primary is-light is-small is-rounded">
+                                    <a href="{{ url_for('update_producto', id_producto=producto.id_producto) }}" 
+                                       class="button is-warning is-light is-small is-rounded">
                                         Editar
                                     </a>
 
-                                    <a href="{{ url_for('delete_estudiante', no_control=estudiante.no_control) }}" 
+                                    <a href="{{ url_for('delete_producto', id_producto=producto.id_producto) }}" 
                                        class="button is-danger is-light is-small is-rounded">
                                         Eliminar
                                     </a>
